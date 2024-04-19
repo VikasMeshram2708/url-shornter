@@ -4,6 +4,7 @@ require("dotenv").config();
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
+const SlugRoute = require("../route/slug.route");
 
 const app = express();
 
@@ -18,6 +19,9 @@ app.get("/", (req, res) => {
     message: "Hello,from,server!",
   });
 });
+
+// API
+app.use("/api/v1", SlugRoute);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
