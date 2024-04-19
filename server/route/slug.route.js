@@ -4,8 +4,10 @@ const ShortUniqueId = require("short-unique-id");
 const { client, UrlColl } = require("../src/Db");
 
 const router = express.Router();
+// bbs7DPjRu6
 
-router.get("/createSlug", async (req, res) => {
+// Create new tiny url
+router.post("/createSlug", async (req, res) => {
   try {
     // Sanitize the incoming data
     const reqBody = req.body;
@@ -22,7 +24,7 @@ router.get("/createSlug", async (req, res) => {
 
     // insert into DB.
     const savedTinyUrl = await UrlColl.insertOne({
-      slug: uid.rnd(),
+      slug: uid.rnd().toLowerCase(),
       url: url,
       created_at: new Date().toLocaleDateString(),
     });
@@ -37,6 +39,39 @@ router.get("/createSlug", async (req, res) => {
       success: false,
       message: error?.message,
     });
+  } finally {
+    await client.close();
+  }
+});
+
+// Access tiny url
+router.get("/:slug", async (req, res) => {
+  try {
+    // Sanitize the incoming data
+    const reqBody = req.params;
+
+    const { slug } = reqBody;
+
+    if (!slug) {
+      throw new Error("Slug is not provided.");
+    }
+
+    // connect to DB
+    await client.connect();
+
+    // find the url using slug.
+    const savedTinyUrl = await UrlColl.findOne({ slug });
+
+    const { url } = savedTinyUrl;
+
+    res.redirect(url);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error?.message,
+    });
+  } finally {
+    await client.close();
   }
 });
 
