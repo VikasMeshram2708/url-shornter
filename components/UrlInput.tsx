@@ -4,12 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { URL } from "@/interfaces/Url";
 import { Copy, Trash2 } from "lucide-react";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { toast } from "./ui/use-toast";
 
 export function UrlInput() {
   const [url, setUrl] = useState("");
   const [allUrls, setAllUrls] = useState<URL[]>([]);
+
+  useEffect(() => {
+    const previousTinyUrls = localStorage.getItem("tinyUrls");
+    if (previousTinyUrls) {
+      setAllUrls(JSON.parse(previousTinyUrls as string));
+    }
+  }, []);
 
   // Handle the submission form
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -19,7 +26,8 @@ export function UrlInput() {
       url: url,
     };
 
-    setAllUrls((prev) => [...prev, newUrl]);
+    setAllUrls([...allUrls, newUrl]);
+    localStorage.setItem("tinyUrls", JSON.stringify([...allUrls, newUrl]));
     setUrl("");
     console.log({ url });
   };
@@ -42,7 +50,9 @@ export function UrlInput() {
   // Handle Delete
   const handleDelete = (id: number) => {
     try {
-      setAllUrls(allUrls.filter((item) => item?.id !== id));
+      const filteredTinyUrls = allUrls.filter((item) => item?.id !== id);
+      setAllUrls(filteredTinyUrls);
+      localStorage.setItem("tinyUrls", JSON.stringify(filteredTinyUrls));
     } catch (error) {
       const err = error as Error;
       return toast({
@@ -57,6 +67,7 @@ export function UrlInput() {
         className="container mx-auto mt-10 flex w-full max-w-lg items-center space-x-2"
       >
         <Input
+          autoFocus
           value={url}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setUrl(e?.target?.value)
@@ -83,8 +94,14 @@ export function UrlInput() {
             >
               <li>{item?.url}</li>
               <div className="flex items-center gap-3 flex-wrap">
-                <Copy className="cursor-pointer hover:text-green-500" onClick={() => handleCopy(item?.url)} />
-                <Trash2 className="cursor-pointer hover:text-red-500" onClick={() => handleDelete(item?.id)} />
+                <Copy
+                  className="cursor-pointer hover:text-green-500"
+                  onClick={() => handleCopy(item?.url)}
+                />
+                <Trash2
+                  className="cursor-pointer hover:text-red-500"
+                  onClick={() => handleDelete(item?.id)}
+                />
               </div>
             </div>
           ))
