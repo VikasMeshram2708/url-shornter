@@ -2,31 +2,36 @@ import { UrlSchema, UrlSchemaProp } from "@/models/UrlModel";
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { ZodError } from "zod";
+import { UrlColl, clientInstance } from "@/utils/Db";
 
 export const POST = async (request: NextRequest) => {
   try {
     const reqBody: UrlSchemaProp = await request.json();
-    // Sanitize the incoming data
-    const { url } = reqBody;
-    // console.log("log", url);
 
+    const { url } = reqBody;
+
+    // Sanitize the incoming data
     UrlSchema.parse({ url });
 
     // Unique ID
-    const uniqueSlug = nanoid().toLowerCase();
-    // console.log("uid", uniqueSlug);
+    const uniqueSlug = nanoid(7).toLowerCase();
 
-    // New Tiny URL
-    const newUrl = {
-      uniqueSlug,
+    // Connect to DB
+    await clientInstance.connect();
+
+    // Insert into DB
+    const savedTinyUrls = await UrlColl.insertOne({
+      slug: `https://www.${uniqueSlug}.com`,
       url: url,
-    };
+      createdAt: new Date().toLocaleDateString()
+    });
 
     // return tinyURL in the response
     return NextResponse.json(
       {
         success: true,
-        data: newUrl,
+        data: savedTinyUrls,
+        uniqueSlug
       },
       {
         status: 201,
