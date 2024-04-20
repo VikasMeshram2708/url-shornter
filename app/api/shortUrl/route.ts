@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
 
     // Insert into DB
     const savedTinyUrls = await UrlColl.insertOne({
-      slug: `https://www.${uniqueSlug}.com`,
+      slug: uniqueSlug,
       url: url,
       createdAt: new Date().toLocaleDateString()
     });
