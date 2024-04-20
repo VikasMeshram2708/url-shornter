@@ -5,8 +5,8 @@ import { NavLinks } from "@/data/NavLinks";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between font-Poppins py-3 px-10 gap-5">
-      <h1 className="text-2xl font-semibold">
+    <nav className="flex items-center justify-between flex-wrap font-Poppins py-3 px-10 gap-5">
+      <h1 className="text-3xl font-semibold">
         <Link href="/">TinyMakes</Link>
       </h1>
       <ul className="flex items-center gap-2 sm:gap-4 flex-wrap">
