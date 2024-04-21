@@ -22,7 +22,11 @@ export const GET = async (request: NextRequest) => {
     // console.log("g", url);
 
     // Redirect to that url
-    return NextResponse.redirect(url);
+    // return NextResponse.redirect(url);
+    return NextResponse.json({
+      success: true,
+      url: url,
+    });
   } catch (error) {
     const err = error as Error;
     if (err instanceof ZodError) {

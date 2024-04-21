@@ -6,10 +6,12 @@ import { URL } from "@/interfaces/Url";
 import { Copy, Trash2 } from "lucide-react";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { toast } from "./ui/use-toast";
+import Link from "next/link";
 
 export function UrlInput() {
   const [url, setUrl] = useState("");
   const [allUrls, setAllUrls] = useState<URL[]>([]);
+  const [slug, setSlug] = useState("");
 
   useEffect(() => {
     const previousTinyUrls = localStorage.getItem("tinyUrls");
@@ -38,8 +40,10 @@ export function UrlInput() {
     const newUrl: { id: number; url: string } = {
       id: Date.now(),
       // http://localhost:3000/api/redirectUrl?redirectSlug=esnwt-g
-      url: `${window.location.origin}/api/redirectUrl?redirectSlug=${result?.uniqueSlug}`,
+      url: `${window.location.origin}/${result?.uniqueSlug}`,
     };
+
+    setSlug(result?.uniqueSlug);
 
     setAllUrls([...allUrls, newUrl]);
     localStorage.setItem("tinyUrls", JSON.stringify([...allUrls, newUrl]));
