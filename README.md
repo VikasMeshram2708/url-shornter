@@ -6,6 +6,8 @@
 
 - [x] API for Shorting the URL.
 
+- [x] Show url with unique Id attached.
+
 ## Future Features
 
 - Authentication and Authorization.

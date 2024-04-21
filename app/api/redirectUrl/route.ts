@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { UrlColl, clientInstance } from "@/utils/Db";
-import { SlugSchema, SlugSchemaProp } from "@/models/FindUrl";
 import { DbUrl } from "@/interfaces/DbStruct";
 
-// esnwt-g
 export const GET = async (request: NextRequest) => {
   try {
     const param = request.nextUrl.searchParams;
 
     const paramSlug = param.get("redirectSlug");
-
-    console.log('praram', paramSlug);
 
     // Connect to DB
     await clientInstance.connect();
@@ -23,7 +19,7 @@ export const GET = async (request: NextRequest) => {
     });
     const { url } = getUrl;
 
-    console.log("g", url);
+    // console.log("g", url);
 
     // Redirect to that url
     return NextResponse.redirect(url);

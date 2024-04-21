@@ -21,9 +21,24 @@ export function UrlInput() {
   // Handle the submission form
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const response = await fetch("/api/shortUrl", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+    });
+
+    const result = await response.json();
+    // console.log(result);
+    // toast({
+    //   title: result?.message,
+    // });
     const newUrl: { id: number; url: string } = {
       id: Date.now(),
-      url: url,
+      // http://localhost:3000/api/redirectUrl?redirectSlug=esnwt-g
+      url: `${window.location.origin}/api/redirectUrl?redirectSlug=${result?.uniqueSlug}`,
     };
 
     setAllUrls([...allUrls, newUrl]);
