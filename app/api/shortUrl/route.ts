@@ -19,11 +19,28 @@ export const POST = async (request: NextRequest) => {
     // Connect to DB
     await clientInstance.connect();
 
+    // check if the slug is already in use or not
+    const validateSlug = await UrlColl.findOne({
+      slug: uniqueSlug,
+    });
+
+    if (validateSlug) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Slug is already in use.",
+        },
+        {
+          status: 422,
+        }
+      );
+    }
+
     // Insert into DB
     const savedTinyUrls = await UrlColl.insertOne({
       slug: uniqueSlug,
       url: url,
-      createdAt: new Date().toLocaleDateString()
+      createdAt: new Date().toLocaleDateString(),
     });
 
     // return tinyURL in the response
@@ -31,7 +48,7 @@ export const POST = async (request: NextRequest) => {
       {
         success: true,
         data: savedTinyUrls,
-        uniqueSlug
+        uniqueSlug,
       },
       {
         status: 201,

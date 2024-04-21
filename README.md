@@ -8,6 +8,8 @@
 
 - [x] Show url with unique Id attached.
 
+* [x] Slug should be unique.
+
 ## Future Features
 
 - Authentication and Authorization.
