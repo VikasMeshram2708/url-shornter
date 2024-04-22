@@ -26,7 +26,7 @@ const AboutPage: React.FC = () => {
 
         <h2 className="mt-8 mb-4 text-2xl font-bold">Get in Touch</h2>
         <p className="mb-6">
-          If you have any questions, feedback, or suggestions, we'd love to hear from you. You can reach us via email at <a href="mailto:contact@tinymakes.com">contact@tinymakes.com</a> or through our social media channels.
+          If you have any questions, feedback, or suggestions, we'd love to hear from you. You can reach us via email at <a href="mailto:test@gmail.com">test@gmail.com</a> or through our social media channels.
         </p>
       </div>
     </div>
