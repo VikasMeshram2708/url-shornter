@@ -10,6 +10,10 @@
 
 * [x] Slug should be unique.
 
+- [x] API for contact us page.
+
+- [x] Active state navbar to acknowledge which page is active
+
 ## Future Features
 
 - Authentication and Authorization.

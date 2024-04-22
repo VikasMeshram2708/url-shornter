@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
 import { FormInput, FormInputProp } from "@/models/FormInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -18,9 +19,33 @@ export default function Contact() {
     resolver: zodResolver(FormInput),
   });
 
-  const SubmitContactForm: SubmitHandler<FormInputProp> = (data) => {
-    console.log(data);
-    reset();
+  const SubmitContactForm: SubmitHandler<FormInputProp> = async (data) => {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        return toast({
+          title: result?.message,
+        });
+      }
+      reset();
+      return toast({
+        title: result?.message,
+      });
+    } catch (error) {
+      const err = error as Error;
+      console.log(`Something went wrong. Please try again. :${error}`);
+      return toast({
+        title: err?.message,
+      });
+    }
   };
   return (
     <section className="min-h-screen">

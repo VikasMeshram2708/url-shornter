@@ -10,3 +10,5 @@ export const clientInstance = new MongoClient(NEXT_PUBLIC_DB_URL!);
 export const db = clientInstance.db(NEXT_PUBLIC_DB_NAME)
 
 export const UrlColl = db.collection('tinyUrls');
+export const ContactColl = db.collection('tinyUrlsContact');
+
